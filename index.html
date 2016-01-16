@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular 2</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="dist/css/styles.css">
+</head>
+<body>
+
+<!--
+    Keep it stuck on the left,
+    it will be easier to work with code examples,
+    case <pre> will keep code indentation
+-->
+<div class="reveal">
+<div class="slides">
+<section>
+    <h1>Angular 2</h1>
+    <p>Знакомимся с библиотекой</p>
+    <img class="clean-img round" src="dist/images/angular2.png">
+</section>
+<section>
+    <h2>AngularJS vs Angular 2</h2>
+    <ul class="fragment">
+        <li>Angular 2 это не вторая версия AngularJS</li>
+        <li>Общего между ними только команда разработчиков</li>
+        <li>AngularJS - это контроллеры, директивы, scope, digest cycle</li>
+        <li>Angular 2 - это компоненты</li>
+    </ul>
+</section>
+<section>
+    <h2>Зачем такие перемены?</h2>
+    <ul class="fragment">
+        <li>AngularJS имел очень сложный API (directives)</li>
+        <li>Медленный рендер</li>
+        <li>AngularJS дублировал функционал, который приходил с ES2015</li>
+        <li>Своей структурой не позволял добавить необходимые фичи (рендер на сервере)</li>
+    </ul>
+</section>
+<section>
+    <h2>Angular 2 vs React</h2>
+    <ul class="fragment">
+        <li>Обе библиотеки "мыслят" компонентами</li>
+        <li>React - это только View</li>
+        <li>Angular 2 - это полноценный набор инструментов разработки:
+            <ul>
+                <li>Встроенный роутинг</li>
+                <li>Фабрика для создания своих сервисов</li>
+                <li>"Dirty check" между компонентами</li>
+                <li>Встроенные http сервисы</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>Из чего собирается приложение на Angular 2</h2>
+    <ul class="fragment">
+        <li>zone.js</li>
+        <li>rxjs</li>
+        <li>reflect-metadata</li>
+        <li>angular 2 components</li>
+    </ul>
+<pre class="fragment"><code>
+    $ npm i --save angular2 reflect-metadata rxjs zone.js
+
+</code></pre>
+</section>
+<section>
+    <h2>Сборка приложения</h2>
+    <ul>
+        <li>gulp</li>
+        <li>browserify</li>
+        <li>tsify</li>
+        <li>vinyl-source-stream</li>
+    </ul>
+<pre class="fragment"><code>
+    gulp.task('browserify', () => {
+        return browserify({
+            entries: 'source/bootstrap.ts'
+        })
+        .plugin(tsify, {
+            target: 'es5',
+            experimentalDecorators: true
+        })
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./js'));
+    });
+
+</code></pre>
+</section>
+<section>
+    <h2>Bootstrap</h2>
+<pre><code>
+    import 'zone.js/lib/browser/zone-microtask';
+    import 'reflect-metadata';
+
+    import {provide} from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {HTTP_PROVIDERS} from 'angular2/http';
+    import {ROUTER_PROVIDERS} from 'angular2/router';
+    import {LocationStrategy} from 'angular2/router';
+    import {HashLocationStrategy} from 'angular2/router';
+
+    import {MyApp} from './app';
+
+    bootstrap(MyApp, [
+        HTTP_PROVIDERS,
+        ROUTER_PROVIDERS,
+        provide(LocationStrategy, {useClass: HashLocationStrategy})
+    ]);
+</code></pre>
+</section>
+<section class="narrow-code">
+    <h2>MyApp</h2>
+<pre><code>
+    @Component({
+        selector: 'store-app',
+        providers: [StoreService]
+    })
+    @View({
+        directives: [ROUTER_DIRECTIVES],
+        template: `
+            &lt;div id="mainContainer"&gt;&lt;/div&gt;
+                &lt;router-outlet&gt;&lt;/router-outlet&gt;
+            &lt;/div&gt;
+        `
+    })
+    @RouteConfig([
+        { path: '/', component: Home, as: 'HomePage' },
+        { path: '/store', component: Store, as: 'StorePage' }
+    ])
+    export class MyApp {
+        constructor(@Inject(StoreService) StoreService) {
+            StoreService.getMenu();
+        }
+    }
+</code></pre>
+</section>
+<section>
+    <h2>Templating</h2>
+<pre><code>
+    &lt;div class="shelfContainer"&gt;
+        &lt;ul class="list"&gt;
+            &lt;li class="item"
+                *ngFor="#cat of categories"
+                [ngClass]="{active : cat.id == selectedCat.id}"
+                (click)="selectCategory(cat)"&gt;
+                &#123;&#123; cat.category &#125;&#125;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+
+</code></pre>
+</section>
+<section>
+    <h2>Service</h2>
+<pre><code>
+    import {Http} from 'angular2/http';
+    import {Observable} from 'rxjs/Observable';
+    import {Injectable, Inject} from 'angular2/core';
+
+    @Injectable()
+    export class StoreService {
+        constructor(@Inject(Http) private Http) {
+        }
+
+        getMenu(): Observable&lt;any&gt; {
+            return this.Http.get('../menu.json');
+        }
+    }
+
+</code></pre>
+</section>
+
+
+</div>
+</div>
+
+<script src="dist/scripts.js"></script>
+</body>
+</html>
