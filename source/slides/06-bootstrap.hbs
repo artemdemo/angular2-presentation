@@ -1,0 +1,22 @@
+<section>
+    <h2>Bootstrap</h2>
+<pre><code>
+    import 'zone.js/lib/browser/zone-microtask';
+    import 'reflect-metadata';
+
+    import {provide} from 'angular2/core';
+    import {bootstrap} from 'angular2/platform/browser';
+    import {HTTP_PROVIDERS} from 'angular2/http';
+    import {ROUTER_PROVIDERS} from 'angular2/router';
+    import {LocationStrategy} from 'angular2/router';
+    import {HashLocationStrategy} from 'angular2/router';
+
+    import {MyApp} from './app';
+
+    bootstrap(MyApp, [
+        HTTP_PROVIDERS,
+        ROUTER_PROVIDERS,
+        provide(LocationStrategy, {useClass: HashLocationStrategy})
+    ]);
+</code></pre>
+</section>

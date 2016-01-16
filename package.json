@@ -1,7 +1,7 @@
 {
-  "name": "reveal-start-template",
+  "name": "angular2-presentation",
   "version": "1.0.0",
-  "description": "Reveal.js starter template",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "setup": "npm install && bower install && npm run build",

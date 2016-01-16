@@ -1,0 +1,24 @@
+<section>
+    <h2>Сборка приложения</h2>
+    <ul>
+        <li>gulp</li>
+        <li>browserify</li>
+        <li>tsify</li>
+        <li>vinyl-source-stream</li>
+    </ul>
+<pre class="fragment"><code>
+    gulp.task('browserify', () => {
+        return browserify({
+            entries: 'source/bootstrap.ts'
+        })
+        .plugin(tsify, {
+            target: 'es5',
+            experimentalDecorators: true
+        })
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./js'));
+    });
+
+</code></pre>
+</section>

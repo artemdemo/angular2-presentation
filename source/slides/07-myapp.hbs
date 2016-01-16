@@ -1,0 +1,26 @@
+<section class="narrow-code">
+    <h2>MyApp</h2>
+<pre><code>
+    @Component({
+        selector: 'store-app',
+        providers: [StoreService]
+    })
+    @View({
+        directives: [ROUTER_DIRECTIVES],
+        template: `
+            &lt;div id="mainContainer"&gt;&lt;/div&gt;
+                &lt;router-outlet&gt;&lt;/router-outlet&gt;
+            &lt;/div&gt;
+        `
+    })
+    @RouteConfig([
+        { path: '/', component: Home, as: 'HomePage' },
+        { path: '/store', component: Store, as: 'StorePage' }
+    ])
+    export class MyApp {
+        constructor(@Inject(StoreService) StoreService) {
+            StoreService.getMenu();
+        }
+    }
+</code></pre>
+</section>

@@ -1,0 +1,21 @@
+<section>
+    <h2>Service</h2>
+<pre><code>
+    import {Http} from 'angular2/http';
+    import {Observable} from 'rxjs/Observable';
+    import {Injectable, Inject} from 'angular2/core';
+
+    @Injectable()
+    export class StoreService {
+        constructor(@Inject(Http) private Http) {
+        }
+
+        getMenu(): Observable&lt;any&gt; {
+            return this.Http.get('../menu.json');
+        }
+    }
+
+</code></pre>
+</section>
+
+

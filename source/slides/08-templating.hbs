@@ -1,0 +1,16 @@
+<section>
+    <h2>Templating</h2>
+<pre><code>
+    &lt;div class="shelfContainer"&gt;
+        &lt;ul class="list"&gt;
+            &lt;li class="item"
+                *ngFor="#cat of categories"
+                [ngClass]="{active : cat.id == selectedCat.id}"
+                (click)="selectCategory(cat)"&gt;
+                &#123;&#123; cat.category &#125;&#125;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+
+</code></pre>
+</section>
