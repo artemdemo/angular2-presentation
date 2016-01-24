@@ -3,6 +3,7 @@ import gutil from 'gulp-util';
 import less from 'gulp-less';
 import concat from 'gulp-concat';
 import rename from 'gulp-rename';
+import watch from 'gulp-watch';
 import handlebars from 'gulp-compile-handlebars';
 
 /**
@@ -69,8 +70,19 @@ gulp.task('copy', function () {
 
 gulp.task('build', ['js', 'copy', 'less', 'slides']);
 
+/**
+ * Watch task for the files.
+ * Build-in gulp.watch is not working good with new files,
+ * I'm using gulp-watch with gulp-batch to keep track also on new files.
+ */
 gulp.task('watch', () => {
-    gulp.watch('./source/**/*.js', ['js']);
-    gulp.watch('./source/**/*.hbs', ['slides']);
-    gulp.watch('./source/**/*.less', ['less']);
+    watch('./source/**/*.hbs', batch(function (events, done) {
+        gulp.start('slides', done);
+    }));
+    watch('./source/js/*.js', batch(function (events, done) {
+        gulp.start('js', done);
+    }));
+    watch('./source/less/*.less', batch(function (events, done) {
+        gulp.start('less', done);
+    }));
 });
